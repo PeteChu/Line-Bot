@@ -24,12 +24,13 @@ app.post('/webhook', (req, res) => {
 })
 
 function sendText (sender, text) {
+	let recivedText = text
   let data = {
     to: sender,
     messages: [
       {
         type: 'text',
-        text: this.text
+        text: this.recivedText
       }
     ]
   }
