@@ -23,7 +23,7 @@ app.post('/webhook', (req, res) => {
   res.sendStatus(200)
 })
 
-function sendText (sender, this.text) {
+function sendText (sender, text) {
   let data = {
     to: sender,
     messages: [
