@@ -4,16 +4,12 @@ var app = express()
 
 app.use(bodyParser.json())
 
-app.set('port', (process.env.PORT || 80))
+app.set('port', (process.env.PORT || 4000))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 
-app.get('/', function (req, res) {
-	res.send('Hello')
-})
-
-app.post('/webhook', (req, res) => {
+app.post('/', (req, res) => {
     res.sendStatus(200)
 })
 
