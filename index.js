@@ -20,17 +20,17 @@ app.post('/webhook', (req, res) => {
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
   sendText(sender, text)
+	res.send(sender, text)
   res.sendStatus(200)
 })
 
-function sendText (sender, text) {
-	let recivedText = text
+function sendText (sender, recivedText) {
   let data = {
     to: sender,
     messages: [
       {
         type: 'text',
-        text: this.recivedText
+        text: recivedText
       }
     ]
   }
