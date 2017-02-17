@@ -26,7 +26,7 @@ app.post('/webhook', (req, res) => {
   res.sendStatus(200)
 })
 
-function yql(sender, text, callback) {
+function yql(text, callback) {
   var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + text + '")');
   query.exec(function(err, data) {
     location = data.query.results.channel.location;
