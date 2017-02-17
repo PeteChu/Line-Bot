@@ -17,8 +17,9 @@ app.post('/webhook', (req, res) => {
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
 
+  sendText(sender, '1')
   yql(text,function(data){
-    sendText(sender, data.query.results.channel.location);
+    sendText(sender, text);
   });
 
 	res.send(sender, text)
