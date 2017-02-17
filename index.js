@@ -29,7 +29,7 @@ app.post('/webhook', (req, res) => {
 function yql(sender, text, callback) {
   var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+text+'")');
   query.exec(function(err, data) {
-      sendText(sender,'2')
+      sendText(sender,data)
       callback(data);
   });
 }
