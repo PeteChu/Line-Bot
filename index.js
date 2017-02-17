@@ -1,6 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
+const YQL = require('yql')
 var app = express()
 
 app.use(bodyParser.json())
@@ -15,10 +16,21 @@ app.post('/webhook', (req, res) => {
   console.log(text, sender, replyToken)
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
-  sendText(sender, text)
+
+  yql(text,function(data){
+    sendText(sender, stringify(data.query.results.channel.location));
+  });
+
 	res.send(sender, text)
   res.sendStatus(200)
 })
+
+function yql(text, callback) {
+  var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+text+'")');
+  query.exec(function(err, data) {
+    callback(data);
+  });
+}
 
 function sendText (sender, recivedText) {
   let data = {
