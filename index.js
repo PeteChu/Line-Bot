@@ -1,13 +1,11 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
+const YQL = require('yql');
 var app = express()
-/*eslint-disable */
-// var env = require('dotenv').config({ path: __dirname + '/.env' })
-/*eslint-enable */
+
 
 app.use(bodyParser.json())
-
 app.set('port', (process.env.PORT || 4000))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -19,8 +17,8 @@ app.post('/webhook', (req, res) => {
   console.log(text, sender, replyToken)
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
-  sendText(sender, text)
-	res.send(sender, text)
+  forecast(sender, text)
+
   res.sendStatus(200)
 })
 
@@ -48,6 +46,18 @@ function sendText (sender, recivedText) {
     if (res) console.log('success')
     if (body) console.log(body)
   })
+}
+
+function forecast(sender, text){
+var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+text+'")');
+query.exec(function(err, data) {
+  if(err){
+    sendText(sender,'error');
+  }
+  location = data.query.results.channel.location;
+  // condition = data.query.results.channel.item.condition;
+  sendText(sender, stringify(location));
+});
 }
 
 app.listen(app.get('port'), function () {
