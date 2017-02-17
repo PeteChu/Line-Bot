@@ -20,7 +20,7 @@ app.post('/webhook', (req, res) => {
   sendText(sender, 'state : /webkook')
   yql(sender, text, function(data){
     sendText(sender, 'stat : sendText')
-    sendText(sender, JSON.stringify(data));
+    sendText(sender, data);
   });
 
 	res.send(sender, text)
@@ -36,6 +36,7 @@ function yql(sender, text, callback) {
 }
 
 function sendText (sender, recivedText) {
+  sendText(sender, 'recivedText = ' + recivedText)
   let data = {
     to: sender,
     messages: [
