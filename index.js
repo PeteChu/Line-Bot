@@ -17,8 +17,7 @@ app.post('/webhook', (req, res) => {
   console.log(text, sender, replyToken)
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
-  forecast(sender, text)
-
+  sendText(sender,text);
   res.sendStatus(200)
 })
 
@@ -46,18 +45,6 @@ function sendText (sender, recivedText) {
     if (res) console.log('success')
     if (body) console.log(body)
   })
-}
-
-function forecast(sender, text){
-var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+text+'")');
-query.exec(function(err, data) {
-  if(err){
-    sendText(sender,'error');
-  }
-  location = data.query.results.channel.location;
-  // condition = data.query.results.channel.item.condition;
-  sendText(sender, stringify(location));
-});
 }
 
 app.listen(app.get('port'), function () {
