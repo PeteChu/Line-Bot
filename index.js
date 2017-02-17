@@ -6,7 +6,9 @@ var app = express()
 
 app.use(bodyParser.json())
 app.set('port', (process.env.PORT || 4000))
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 app.use(bodyParser.json())
 
 app.post('/webhook', (req, res) => {
@@ -17,34 +19,28 @@ app.post('/webhook', (req, res) => {
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
 
-  sendText(sender, 'state : /webkook')
-  yql(sender, text, function(data){
-    sendText(sender, 'stat : sendText')
-    sendText(sender, JSON.stringify(data));
+  yql(text, function(data) {
+    sendText(sender, data);
   });
 
-	res.send(sender, text)
   res.sendStatus(200)
 })
 
 function yql(sender, text, callback) {
-  var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+text+'")');
+  var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + text + '")');
   query.exec(function(err, data) {
-      sendText(sender,' state : yql')
-      callback(data);
+    location = data.query.results.channel.location;
+    callback(JSON.stringify(location));
   });
 }
 
-function sendText (sender, recivedText) {
-  sendText(sender, 'recivedText = ' + recivedText)
+function sendText(sender, recivedText) {
   let data = {
     to: sender,
-    messages: [
-      {
-        type: 'text',
-        text: recivedText
-      }
-    ]
+    messages: [{
+      type: 'text',
+      text: recivedText
+    }]
   }
   request({
     headers: {
@@ -55,13 +51,13 @@ function sendText (sender, recivedText) {
     method: 'POST',
     body: data,
     json: true
-  }, function (err, res, body) {
+  }, function(err, res, body) {
     if (err) console.log('error')
     if (res) console.log('success')
     if (body) console.log(body)
   })
 }
 
-app.listen(app.get('port'), function () {
+app.listen(app.get('port'), function() {
   console.log('run at port', app.get('port'))
 })
