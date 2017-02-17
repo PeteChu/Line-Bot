@@ -42,7 +42,9 @@ function sendText(sender, recivedText) {
     to: sender,
     messages: [{
       type: 'text',
-      text: recivedText.city
+      text: 'City : ' + recivedText.city+
+            '\nCountry : ' + recivedText.country+
+            '\nTemparature : ' + recivedText.temp + ' F';
     }]
   }
   request({
