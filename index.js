@@ -20,7 +20,11 @@ app.post('/webhook', (req, res) => {
   // console.log(req.body.events[0])
 
   yql(text, function(data) {
-    sendText(sender, data);
+    if(data != 'err'){
+      sendText(sender, data);
+    }else {
+      sendText(sender, "เจ๊ง");
+    }
   });
 
   res.sendStatus(200)
@@ -29,8 +33,13 @@ app.post('/webhook', (req, res) => {
 function yql(text, callback) {
   var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + text + '")');
   query.exec(function(err, data) {
-    country = data.query.results.channel.location.country;
-    callback(JSON.stringify(country));
+    try {
+      country = data.query.results.channel.location.country;
+      callback(JSON.stringify(country));
+    } catch (err) {
+      callback('err')
+    }
+
   });
 }
 
