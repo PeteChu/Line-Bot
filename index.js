@@ -29,11 +29,8 @@ app.post('/webhook', (req, res) => {
 function yql(text, callback) {
   var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + text + '")');
   query.exec(function(err, data) {
-    // city = data.query.results.channel.location.city;
-    // country = data.query.results.channel.location.country;
-    temp = data.query.results.channel.item.condition.temp;
-
-    callback({temp});
+    country = data.query.results.channel.location.country;
+    callback(JSON.stringify(country));
   });
 }
 
@@ -42,7 +39,7 @@ function sendText(sender, recivedText) {
     to: sender,
     messages: [{
       type: 'text',
-      text: 'Temparature : ' + JSON.stringify(recivedText.temp)+ ' F';
+      text: recivedText
     }]
   }
   request({
