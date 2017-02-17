@@ -1,9 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
-const YQL = require('yql');
 var app = express()
-
 
 app.use(bodyParser.json())
 app.set('port', (process.env.PORT || 4000))
@@ -17,7 +15,8 @@ app.post('/webhook', (req, res) => {
   console.log(text, sender, replyToken)
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
-  sendText(sender,text);
+  sendText(sender, text)
+	res.send(sender, text)
   res.sendStatus(200)
 })
 
