@@ -17,9 +17,10 @@ app.post('/webhook', (req, res) => {
   console.log(typeof sender, typeof text)
   // console.log(req.body.events[0])
 
-  sendText(sender, '1')
+  sendText(sender, 'state : /webkook')
   yql(sender, text, function(data){
-    sendText(sender, text);
+    sendText(sender, 'stat : sendText')
+    sendText(sender, JSON.stringify(data));
   });
 
 	res.send(sender, text)
@@ -29,7 +30,7 @@ app.post('/webhook', (req, res) => {
 function yql(sender, text, callback) {
   var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+text+'")');
   query.exec(function(err, data) {
-      sendText(sender,JSON.stringify(data))
+      sendText(sender,' state : yql')
       callback(data);
   });
 }
