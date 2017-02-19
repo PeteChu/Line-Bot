@@ -47,7 +47,7 @@ function yql(text, callback) {
 }
 
 function sendText(sender, results) {
-  let x = results == 'เจ๊ง' ? 'เจ๊ง' : "City : " + results.city + '\nCountry : ' + results.country + '\nTemp : ' + (results.temp - 32) * (5/9) 
+  let x = results == 'เจ๊ง' ? 'เจ๊ง' : "City : " + results.city + '\nCountry : ' + results.country + '\nTemp : ' + ~~((results.temp - 32) * (5/9))
 
   let data = {
     to: sender,
