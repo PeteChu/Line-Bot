@@ -34,8 +34,11 @@ function yql(text, callback) {
   var query = new YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + text + '")');
   query.exec(function(err, data) {
     try {
+      city = data.query.results.channel.location.city;
       country = data.query.results.channel.location.country;
-      callback(JSON.stringify(country));
+      temp = data.query.results.channel.item.condition.temp;
+
+      callback({city, country, temp});
     } catch (err) {
       callback('err')
     }
@@ -43,12 +46,14 @@ function yql(text, callback) {
   });
 }
 
-function sendText(sender, recivedText) {
+function sendText(sender, results) {
+  let x = results == 'เจ๊ง' ? 'เจ๊ง' : "City : " + results.city + '\nCountry : ' + results.country + '\nTemp' + results.temp
+
   let data = {
     to: sender,
     messages: [{
       type: 'text',
-      text: recivedText
+      text: x
     }]
   }
   request({
